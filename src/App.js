@@ -1,4 +1,4 @@
-import { useInput, useTabs } from './Hooks';
+import { useClick, useInput, useTabs, useTitle } from './Hooks';
 
 const content = [
   {
@@ -13,9 +13,15 @@ const content = [
 
 const App = () => {
   const maxLength = value => value.length <= 10;
-
   const name = useInput('Mr.', maxLength);
   const { currentItem, changeItem } = useTabs(0, content);
+  const titleUpdater = useTitle('Loading...');
+  setTimeout(() => {
+    titleUpdater('Home');
+  }, 1000);
+  const onClick = () => console.log('say hello');
+  const title = useClick(onClick);
+
   return (
     <>
       <div className="useInput">
@@ -29,6 +35,9 @@ const App = () => {
           </button>
         ))}
         <div>{currentItem.content}</div>
+      </div>
+      <div className="useClick">
+        <h1 ref={title}>Hi</h1>
       </div>
     </>
   );
