@@ -53,9 +53,41 @@ export const useClick = onClick => {
     }
     return () => {
       if (element.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         element.current.removeEventListener('click', onClick);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return element;
+};
+
+// useConfirm
+export const useConfirm = (message = '', onConfirm, onCancel) => {
+  if (onConfirm && typeof onConfirm !== 'function') {
+    return;
+  }
+  if (onCancel && typeof onCancel !== 'function') {
+    return;
+  }
+  const confirmAction = () => {
+    if (window.confirm(message)) {
+      onConfirm();
+    } else {
+      onCancel();
+    }
+  };
+  return confirmAction;
+};
+
+// usePreventLeave
+export const usePreventLeave = () => {
+  const listener = event => {
+    event.preventDefault();
+    event.returnValue = '';
+  };
+  const enablePrevent = () => window.addEventListener('beforeunload', listener);
+  const disablePrevent = () =>
+    window.removeEventListener('beforeunload', listener);
+  return { enablePrevent, disablePrevent };
 };
