@@ -91,3 +91,63 @@ export const usePreventLeave = () => {
     window.removeEventListener('beforeunload', listener);
   return { enablePrevent, disablePrevent };
 };
+
+// useBeforeLeave
+export const useBeforeLeave = onBefore => {
+  const handle = event => {
+    const { clientY } = event;
+    if (clientY <= 0) {
+      onBefore();
+    }
+  };
+  useEffect(() => {
+    if (typeof onBefore !== 'function') {
+      return;
+    }
+    document.addEventListener('mouseleave', handle);
+    return () => document.removeEventListener('mouseleave', handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};
+
+// useFadeIn
+export const useFadeIn = (duration = 1, delay = 0, animate = 'ease') => {
+  const element = useRef();
+  useEffect(() => {
+    if (
+      typeof duration !== 'number' ||
+      typeof delay !== 'number' ||
+      typeof animate !== 'string'
+    ) {
+      return;
+    }
+    if (element.current) {
+      const { current } = element;
+      current.style.transition = `opacity ${duration}s ${animate} ${delay}s`;
+      current.style.opacity = 1;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return { ref: element, style: { opacity: 0 } };
+};
+
+// useNetwork
+export const useNetwork = onChange => {
+  const [status, setStatus] = useState(navigator.onLine);
+  const handleChange = () => {
+    if (typeof onChange === 'function') {
+      onChange(navigator.onLine);
+    }
+    setStatus(navigator.onLine);
+  };
+  useEffect(() => {
+    window.addEventListener('online', handleChange);
+    window.addEventListener('offline', handleChange);
+    return () => {
+      window.removeEventListener('online', handleChange);
+      window.removeEventListener('offline', handleChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return status;
+};

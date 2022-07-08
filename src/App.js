@@ -1,7 +1,10 @@
 import {
+  useBeforeLeave,
   useClick,
   useConfirm,
+  useFadeIn,
   useInput,
+  useNetwork,
   usePreventLeave,
   useTabs,
   useTitle,
@@ -44,6 +47,20 @@ const App = () => {
   // usePreventLeave
   const { enablePrevent, disablePrevent } = usePreventLeave();
 
+  // useBeforeLeave
+  const begForLife = () => console.log('Pls dont leave');
+  useBeforeLeave(begForLife);
+
+  // useFadeIn
+  const element1 = useFadeIn(2, 0.2, 'ease-out');
+  const element2 = useFadeIn(2, 0.5);
+
+  // useNetwork
+  const handleNetworkChange = online => {
+    console.log(online ? 'We just went online' : 'We are offline');
+  };
+  const onLine = useNetwork(handleNetworkChange);
+
   return (
     <>
       <div className="useInput">
@@ -67,6 +84,13 @@ const App = () => {
       <div className="usePreventLeave">
         <button onClick={enablePrevent}>Protect</button>
         <button onClick={disablePrevent}>Unprotect</button>
+      </div>
+      <div className="useFadeIn">
+        <h1 {...element1}>HI</h1>
+        <p {...element2}>lorem ipsum .......</p>
+      </div>
+      <div className="useNetwork">
+        <h1>{onLine ? 'Online' : 'Offline'}</h1>
       </div>
     </>
   );
