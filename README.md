@@ -21,4 +21,11 @@
 ## useNetwork
 네트워크가 online 혹은 offline 될 때 실행
 
+## useScroll
+스크롤을 감지해서 특정 이벤트 발생
+
+## useFullscreen
+전체 화면으로 보기, 되돌아가기
+
+
 > 출처: [https://nomadcoders.co/react-hooks-introduction](https://nomadcoders.co/react-hooks-introduction)
