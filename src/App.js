@@ -3,9 +3,11 @@ import {
   useClick,
   useConfirm,
   useFadeIn,
+  useFullscreen,
   useInput,
   useNetwork,
   usePreventLeave,
+  useScroll,
   useTabs,
   useTitle,
 } from './Hooks';
@@ -61,6 +63,12 @@ const App = () => {
   };
   const onLine = useNetwork(handleNetworkChange);
 
+  // useScroll
+  const { y } = useScroll();
+
+  // useFullscreen
+  const { element, trigger, exitFull } = useFullscreen();
+
   return (
     <>
       <div className="useInput">
@@ -91,6 +99,25 @@ const App = () => {
       </div>
       <div className="useNetwork">
         <h1>{onLine ? 'Online' : 'Offline'}</h1>
+      </div>
+      <div
+        className="useScroll"
+        style={
+          {
+            /* height: '1000vh' */
+          }
+        }
+      >
+        <h1 style={{ position: 'fixed', color: y > 100 ? 'red' : 'blue' }}>
+          Hi
+        </h1>
+      </div>
+      <div style={{ marginTop: '50px' }} className="useFullscreen">
+        <div ref={element}>
+          <img src="https://www.fillmurray.com/640/360" alt="" />
+          <button onClick={exitFull}>Exit Fullscreen</button>
+        </div>
+        <button onClick={trigger}>Make Fullscreen</button>
       </div>
     </>
   );

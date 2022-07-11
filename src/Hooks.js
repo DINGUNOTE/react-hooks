@@ -151,3 +151,49 @@ export const useNetwork = onChange => {
   }, []);
   return status;
 };
+
+// useScroll
+export const useScroll = () => {
+  const [state, setState] = useState({
+    x: 0,
+    y: 0,
+  });
+  const onScroll = () => {
+    setState({ y: window.scrollY, x: window.scrollX });
+  };
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return state;
+};
+
+// useFullscreen
+export const useFullscreen = () => {
+  const element = useRef();
+  const trigger = () => {
+    if (element.current) {
+      if (element.current.requestFullscreen) {
+        element.current.requestFullscreen();
+      } else if (element.current.mozRequestFullScreen) {
+        element.current.mozRequestFullScreen();
+      } else if (element.current.webkitRequestFullscreen) {
+        element.current.webkitRequestFullscreen();
+      } else if (element.current.msRequestFullscreen) {
+        element.current.msRequestFullscreen();
+      }
+    }
+  };
+  const exitFull = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  };
+  return { element, trigger, exitFull };
+};
