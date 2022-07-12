@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import defaultAxios from 'axios';
 
 // useInput
 export const useInput = (initialValue, validator) => {
@@ -196,4 +197,61 @@ export const useFullscreen = () => {
     }
   };
   return { element, trigger, exitFull };
+};
+
+// useNotification
+export const useNotification = (title, options) => {
+  if (!('Notification' in window)) {
+    return;
+  }
+  const fierNotif = () => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          new Notification(title, options);
+        } else {
+          return;
+        }
+      });
+    } else {
+      new Notification(title, options);
+    }
+  };
+  return fierNotif;
+};
+
+// useAxios
+export const useAxios = (options, axiosInstance = defaultAxios) => {
+  const [state, setState] = useState({
+    loading: true,
+    error: null,
+    data: null,
+  });
+  const [trigger, setTrigger] = useState(0);
+  const reFetch = () => {
+    setState({
+      ...state,
+      loading: true,
+    });
+    setTrigger(Date.now());
+  };
+
+  useEffect(() => {
+    if (!options.url) {
+      return;
+    }
+    axiosInstance(options)
+      .then(data => {
+        setState({
+          ...state,
+          loading: false,
+          data,
+        });
+      })
+      .catch(error => {
+        setState({ ...state, loading: false, error });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trigger]);
+  return { ...state, reFetch };
 };

@@ -1,4 +1,5 @@
 import {
+  useAxios,
   useBeforeLeave,
   useClick,
   useConfirm,
@@ -6,6 +7,7 @@ import {
   useFullscreen,
   useInput,
   useNetwork,
+  useNotification,
   usePreventLeave,
   useScroll,
   useTabs,
@@ -69,6 +71,16 @@ const App = () => {
   // useFullscreen
   const { element, trigger, exitFull } = useFullscreen();
 
+  // useNotification
+  const triggerNotif = useNotification('Can I steal your kimchi?', {
+    body: 'I love kimchi dont you',
+  });
+
+  // useAxios
+  const { loading, data, reFetch } = useAxios({
+    url: 'https://yts.mx/api/v2/list_movies.json',
+  });
+
   return (
     <>
       <div className="useInput">
@@ -118,6 +130,14 @@ const App = () => {
           <button onClick={exitFull}>Exit Fullscreen</button>
         </div>
         <button onClick={trigger}>Make Fullscreen</button>
+      </div>
+      <div className="useNotification">
+        <button onClick={triggerNotif}>Hello</button>
+      </div>
+      <div className="useAxios">
+        <h1>{data && data.status}</h1>
+        <h2>{loading && 'Loading'}</h2>
+        <button onClick={reFetch}>Refresh</button>
       </div>
     </>
   );
